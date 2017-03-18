@@ -3,8 +3,11 @@ node_modules/
 
 public/css/*
 public/js/*
+cache/
 
 .env
 bin/
 .idea
 storage
+!storage/logs/.gitkeep
+!storage/cache/.gitkeep
