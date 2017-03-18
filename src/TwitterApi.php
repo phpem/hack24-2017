@@ -2,5 +2,5 @@
 
 interface TwitterApi
 {
-    public function getTimeLine();
+    public function getMeAndFriendsTimeLine();
 }

@@ -23,19 +23,14 @@ $twitter = new Twitter(
 
 $tweets = [];
 
-foreach ($twitter->load(Twitter::ME_AND_FRIENDS) as $item) {
-    $tweet = new \Model\Tweet();
-    $tweet->userName = $item->user->screen_name;
-    $tweet->message = $item->text;
-    foreach($item->entities->hashtags as $hashtag) {
-        $tweet->hashTags[] = $hashtag->text;
-    }
-    foreach ($item->entities->urls as $url) {
-        $tweet->urls[] = $url->expanded_url;
-    }
+$tmp = DgTwitter::create(
+    getenv("TWITTER_CONSUMER_KEY"),
+    getenv("TWITTER_CONSUMER_SECRET"),
+    getenv("TWITTER_TOKEN"),
+    getenv("TWITTER_TOKEN_SECRET")
+);
 
-    $tweets[] = $tweet;
-}
+$tweets = $tmp->getMeAndFriendsTimeLine();
 
 header("Content-type:application/json");
 echo json_encode(['sentiment' => $sentiment, 'entities' => $entities, 'tweets' => $tweets]);
