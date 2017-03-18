@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dokku": {
-      "postdeploy": "whoami && pwd && npm install -g yarn && yarn install && ls -lah node_modules && ./node_modules/.bin/webpack --verbose"
+      "postdeploy": "whoami && pwd && yarn install && ls -lah node_modules && ./node_modules/.bin/webpack --verbose"
     }
   }
 }
