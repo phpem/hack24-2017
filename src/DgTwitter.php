@@ -4,7 +4,6 @@ namespace App;
 
 class DgTwitter implements TwitterApi
 {
-
     /** @var  \Twitter */
     private $client;
 
@@ -20,6 +19,7 @@ class DgTwitter implements TwitterApi
         $client->httpOptions[CURLOPT_SSL_VERIFYPEER] = true;
 
         $client::$cacheDir = $cacheDir;
+        $client::$cacheExpire = "96 hours";
 
         $created = new DgTwitter();
         $created->client = $client;
