@@ -32,8 +32,6 @@ if (isset($_POST['topic'])) {
     $type = 0;
 
 
-    MyAction::class
-
     foreach ($tweets as $tweet) {
         $tweetSentiment = $textapi->Sentiment($tweet->text);
 
