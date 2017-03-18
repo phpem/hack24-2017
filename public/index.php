@@ -25,8 +25,14 @@ $tweets = [];
 
 foreach ($twitter->load(Twitter::ME_AND_FRIENDS) as $item) {
     $tweet = new \Model\Tweet();
-    $tweet->userName = '';
+    $tweet->userName = $item->user->screen_name;
     $tweet->message = $item->text;
+    foreach($item->entities->hashtags as $hashtag) {
+        $tweet->hashTags[] = $hashtag->text;
+    }
+    foreach ($item->entities->urls as $url) {
+        $tweet->urls[] = $url->expanded_url;
+    }
 
     $tweets[] = $tweet;
 }
