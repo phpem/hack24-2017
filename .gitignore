@@ -1,6 +1,9 @@
 vendor/
 node_modules/
 
+public/css/*
+public/js/*
+
 .env
 bin/
 .idea
