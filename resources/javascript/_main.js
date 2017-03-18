@@ -4,18 +4,27 @@ import ReactDOM from 'react-dom';
 class SearchForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {
+      topic: "foo",
+      username: "bar"
+    };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   handleSubmit(event) {
-    alert('A search was submitted: ' + this.state.value);
+    alert('A search was submitted: ' + this.state.topic + ' ' + this.state.username);
     event.preventDefault();
   }
 
@@ -23,8 +32,12 @@ class SearchForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
-          Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
+          Topic:
+          <input name="topic" type="text" value={this.state.topic} onChange={this.handleInputChange} />
+        </label>
+        <label>
+          Username:
+          <input name="username" type="text" value={this.state.username} onChange={this.handleInputChange} />
         </label>
         <input type="submit" value="Submit" />
       </form>
