@@ -24,15 +24,13 @@ if (isset($_POST['topic'])) {
     $tweets = $twitter->getMeAndFriendsTimeLine();
 
     $topic = $_POST['topic'];
+    $user = $_POST['user'];
 
-    $tweets = $twitter->search(sprintf('%s from:brunty', $topic));
+    $tweets = $twitter->search(sprintf('%s from:%s', $topic, $user));
 
     $analysedTweets = [];
     $sentiment = 0;
     $type = 0;
-
-
-    MyAction::class
 
     foreach ($tweets as $tweet) {
         $tweetSentiment = $textapi->Sentiment($tweet->text);
@@ -75,9 +73,8 @@ if (isset($_POST['topic'])) {
         $sentiment = 'negative';
     }
 
-
     if ($type === 0) {
-        $type = 'neither objectively or subjectively';
+        $type = '';
     }
 
     if ($type > 0) {
@@ -88,12 +85,13 @@ if (isset($_POST['topic'])) {
         $type = 'subjectively';
     }
 
-    echo "Overall, you are $type $sentiment about $topic";
+    echo "Overall, $user is $type $sentiment about $topic";
 } else {
     ?>
 
     <form action="" method="POST">
-        <input type="text" name="topic">
+        <input type="text" name="topic" placeholder="Topic">
+        <input type="text" name="user" placeholder="Username">
         <button>Submit</button>
     </form>
 
