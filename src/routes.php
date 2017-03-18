@@ -1,5 +1,5 @@
 <?php
 
-use Controllers\IndexController;
+use App\Controllers\IndexController;
 
 $app->get('/', IndexController::class . ':index');

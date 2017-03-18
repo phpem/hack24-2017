@@ -11,7 +11,7 @@ return [
         ],
 
         'view' => [
-            'templates' => __DIR__ . '/../src/Presentation/Views',
+            'templates' => __DIR__ . '/../resources/views',
             'cache'     => getenv('APP_ENVIRONMENT') === 'prod' ? __DIR__ . '/../storage/cache/templates' : false,
         ],
     ],

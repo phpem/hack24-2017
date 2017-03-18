@@ -1,7 +1,7 @@
 <?php
 
 
-use Controllers\IndexController;
+use App\Controllers\IndexController;
 use Interop\Container\ContainerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
