@@ -13,5 +13,15 @@ $sentiment = $textapi->Sentiment($input);
 
 $entities = $textapi->Entities($input);
 
+
+$twitter = new Twitter(
+    getenv("TWITTER_CONSUMER_KEY"),
+    getenv("TWITTER_CONSUMER_SECRET"),
+    getenv("TWITTER_TOKEN"),
+    getenv("TWITTER_TOKEN_SECRET")
+);
+
+$tweets = [];
 header("Content-type:application/json");
-echo json_encode(['sentiment' => $sentiment, 'entities' => $entities]);
+echo json_encode(['sentiment' => $sentiment, 'entities' => $entities, 'tweets' => $tweets]);
+
