@@ -14,6 +14,7 @@
     "autoload": {"psr-0": {"": "src"}},
     "license": "MIT",
     "scripts": {
-        "start": "php -S localhost:9999 -t public"
+        "start": "php -S localhost:9999 -t public",
+	"test": "docker run -v $(pwd):/app phpspec/phpspec run"
     }
 }

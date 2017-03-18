@@ -13,5 +13,5 @@ $sentiment = $textapi->Sentiment($input);
 
 $entities = $textapi->Entities($input);
 
-var_dump($sentiment);
-var_dump($entities);
+header("Content-type:application/json");
+echo json_encode(['sentiment' => $sentiment, 'entities' => $entities]);
