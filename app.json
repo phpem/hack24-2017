@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dokku": {
+      // I think predeploy works, but postdeploy doesn't?
       "predeploy": "whoami && pwd && yarn install && ls -lah node_modules && ./node_modules/.bin/webpack --verbose"
     }
   }
