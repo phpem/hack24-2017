@@ -4,6 +4,7 @@ namespace App;
 
 class DgTwitter implements TwitterApi
 {
+    /** @var  \Twitter */
     private $client;
 
     public static function create($consumerKey, $consumerSecret, $token, $tokenSecret) {
@@ -24,7 +25,7 @@ class DgTwitter implements TwitterApi
     {
         $tweets = [];
 
-        foreach ($this->client->load(\Twitter::ME_AND_FRIENDS) as $item) {
+        foreach ($this->client->load(\Twitter::ME_AND_FRIENDS, 200) as $item) {
             $tweet = new Model\Tweet();
             $tweet->userName = $item->user->screen_name;
             $tweet->message = $item->text;
