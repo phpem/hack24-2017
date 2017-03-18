@@ -15,5 +15,11 @@ services:
 
     php-fpm:
         image: php:7.1-fpm-alpine
+        links:
+            - redis
         volumes:
             - .:/srv
+
+    redis:
+        image: redis:alpine
+
