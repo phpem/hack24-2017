@@ -15,10 +15,9 @@ $sentiment = $textapi->Sentiment($input);
 
 $entities = $textapi->Entities($input);
 
-
 $tweets = [];
 
-$twitter = DgTwitter::create(
+$twitter = App\DgTwitter::create(
     getenv('TWITTER_CONSUMER_KEY'),
     getenv('TWITTER_CONSUMER_SECRET'),
     getenv('TWITTER_TOKEN'),
