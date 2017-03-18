@@ -9,7 +9,7 @@ class Tweet implements \JsonSerializable
     public $hashTags;
     public $urls;
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'user_name' => $this->userName,

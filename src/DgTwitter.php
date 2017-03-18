@@ -4,9 +4,12 @@ namespace App;
 
 class DgTwitter implements TwitterApi
 {
+
+    /** @var  \Twitter */
     private $client;
 
-    public static function create($consumerKey, $consumerSecret, $token, $tokenSecret) {
+    public static function create($consumerKey, $consumerSecret, $token, $tokenSecret, $cacheDir)
+    {
         $client = new \Twitter(
             $consumerKey,
             $consumerSecret,
@@ -14,21 +17,25 @@ class DgTwitter implements TwitterApi
             $tokenSecret
         );
 
+        $client->httpOptions[CURLOPT_SSL_VERIFYPEER] = true;
+
+        $client::$cacheDir = $cacheDir;
+
         $created = new DgTwitter();
         $created->client = $client;
 
         return $created;
     }
 
-    public function getMeAndFriendsTimeLine()
+    public function getMeAndFriendsTimeLine(): array
     {
         $tweets = [];
 
-        foreach ($this->client->load(\Twitter::ME_AND_FRIENDS) as $item) {
+        foreach ($this->client->load(\Twitter::ME_AND_FRIENDS, 200) as $item) {
             $tweet = new Model\Tweet();
             $tweet->userName = $item->user->screen_name;
             $tweet->message = $item->text;
-            foreach($item->entities->hashtags as $hashtag) {
+            foreach ($item->entities->hashtags as $hashtag) {
                 $tweet->hashTags[] = $hashtag->text;
             }
             foreach ($item->entities->urls as $url) {
@@ -39,5 +46,10 @@ class DgTwitter implements TwitterApi
         }
 
         return $tweets;
+    }
+
+    public function search(string $query): array
+    {
+        return $this->client->search($query);
     }
 }

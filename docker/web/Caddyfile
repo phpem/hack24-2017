@@ -1,0 +1,12 @@
+0.0.0.0:80 {
+
+    root ./public
+    log ./storage/logs/caddy-access.log
+    errors ./storage/logs/caddy-error.log
+
+    header / X-Clacks-Overhead "GNU Terry Pratchett"
+
+    fastcgi / php-fpm:9000 php {
+        index index.php
+    }
+}

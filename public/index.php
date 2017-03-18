@@ -9,23 +9,93 @@ $dotenv->load();
 
 $textapi = new AYLIEN\TextAPI(getenv("AYLIEN_APP_ID"), getenv("AYLIEN_KEY"));
 
-$input = ['text' => 'Donald Trump is a complete wanker.'];
-
-$sentiment = $textapi->Sentiment($input);
-
-$entities = $textapi->Entities($input);
-
 $tweets = [];
 
 $twitter = App\DgTwitter::create(
     getenv('TWITTER_CONSUMER_KEY'),
     getenv('TWITTER_CONSUMER_SECRET'),
     getenv('TWITTER_TOKEN'),
-    getenv('TWITTER_TOKEN_SECRET')
+    getenv('TWITTER_TOKEN_SECRET'),
+    __DIR__ . '/../cache/'
 );
 
-$tweets = $twitter->getMeAndFriendsTimeLine();
+if (isset($_POST['topic'])) {
 
-header('Content-type:application/json');
-echo json_encode(['sentiment' => $sentiment, 'entities' => $entities, 'tweets' => $tweets]);
+    $tweets = $twitter->getMeAndFriendsTimeLine();
 
+    $topic = $_POST['topic'];
+
+    $tweets = $twitter->search(sprintf('%s from:brunty', $topic));
+
+    $analysedTweets = [];
+    $sentiment = 0;
+    $type = 0;
+
+
+    MyAction::class
+
+    foreach ($tweets as $tweet) {
+        $tweetSentiment = $textapi->Sentiment($tweet->text);
+
+        $analysedTweets[$tweet->id] = [
+            'raw_text'          => $tweet->text,
+            'analysed_text'     => $tweetSentiment,
+            'analysed_entities' => $textapi->Entities($tweet->text)
+        ];
+
+        switch ($tweetSentiment->polarity) {
+            case 'positive':
+                ++$sentiment;
+                break;
+            case 'negative':
+                --$sentiment;
+                break;
+        }
+
+
+        switch ($tweetSentiment->subjectivity) {
+            case 'objective':
+                ++$type;
+                break;
+            case 'subjective':
+                --$type;
+                break;
+        }
+    }
+
+    if ($sentiment === 0) {
+        $sentiment = 'neutral';
+    }
+
+    if ($sentiment > 0) {
+        $sentiment = 'positive';
+    }
+
+    if ($sentiment < 0) {
+        $sentiment = 'negative';
+    }
+
+
+    if ($type === 0) {
+        $type = 'neither objectively or subjectively';
+    }
+
+    if ($type > 0) {
+        $type = 'objectively';
+    }
+
+    if ($type < 0) {
+        $type = 'subjectively';
+    }
+
+    echo "Overall, you are $type $sentiment about $topic";
+} else {
+    ?>
+
+    <form action="" method="POST">
+        <input type="text" name="topic">
+        <button>Submit</button>
+    </form>
+
+    <?php
+}
