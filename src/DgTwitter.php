@@ -8,7 +8,7 @@ class DgTwitter implements TwitterApi
     /** @var  \Twitter */
     private $client;
 
-    public static function create($consumerKey, $consumerSecret, $token, $tokenSecret)
+    public static function create($consumerKey, $consumerSecret, $token, $tokenSecret, $cacheDir)
     {
         $client = new \Twitter(
             $consumerKey,
@@ -18,6 +18,8 @@ class DgTwitter implements TwitterApi
         );
 
         $client->httpOptions[CURLOPT_SSL_VERIFYPEER] = true;
+
+        $client::$cacheDir = $cacheDir;
 
         $created = new DgTwitter();
         $created->client = $client;

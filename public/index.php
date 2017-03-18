@@ -15,7 +15,8 @@ $twitter = App\DgTwitter::create(
     getenv('TWITTER_CONSUMER_KEY'),
     getenv('TWITTER_CONSUMER_SECRET'),
     getenv('TWITTER_TOKEN'),
-    getenv('TWITTER_TOKEN_SECRET')
+    getenv('TWITTER_TOKEN_SECRET'),
+    __DIR__ . '/../cache/'
 );
 
 if (isset($_POST['topic'])) {
