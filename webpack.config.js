@@ -13,6 +13,9 @@ module.exports = {
         filename: "main.min.js"
     },
     plugins: [
+        new webpack.ProvidePlugin({
+          "React": "react",
+        }),
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true
         }),
