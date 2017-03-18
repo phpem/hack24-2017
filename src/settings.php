@@ -11,7 +11,7 @@ return [
         ],
 
         'view' => [
-            'templates' => __DIR__ . '/../resources/views',
+            'templates' => __DIR__ . '/../resources/views/',
             'cache'     => getenv('APP_ENVIRONMENT') === 'prod' ? __DIR__ . '/../storage/cache/templates' : false,
         ],
 
@@ -24,7 +24,7 @@ return [
                 'token' => getenv('TWITTER_TOKEN'),
                 'secret' => getenv('TWITTER_TOKEN_SECRET'),
             ],
-            'cache' => __DIR__ . '/../storage/cache/',
+            'cache' => __DIR__ . '/../storage/cache',
         ],
 
         'aylien' => [

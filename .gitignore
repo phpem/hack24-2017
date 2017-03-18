@@ -8,3 +8,5 @@ public/js/*
 bin/
 .idea
 storage
+!storage/logs/.gitkeep
+!storage/cache/.gitkeep

@@ -35,9 +35,36 @@ $container['view'] = function (ContainerInterface $c) {
     return $view;
 };
 
+$container['twitterAPI'] = function (ContainerInterface $c) {
+
+    $settings = $c->get('settings')['twitter'];
+    $twitter = App\DgTwitter::create(
+        $settings['consumer']['key'],
+        $settings['consumer']['secret'],
+        $settings['access']['token'],
+        $settings['access']['secret'],
+        $settings['cache']
+    );
+
+    return $twitter;
+};
+
+$container['textAPI'] = function (ContainerInterface $c) {
+
+    $settings = $c->get('settings')['aylien'];
+    $textapi = new AYLIEN\TextAPI(
+        $settings['app_id'],
+        $settings['key']
+    );
+
+    return $textapi;
+};
+
 $container[IndexController::class] = function(ContainerInterface $c) {
     $view = $c->get("view"); // retrieve the 'view' from the container
-    return new IndexController($view);
+    $twitterAPI = $c->get('twitterAPI');
+    $textAPI = $c->get('textAPI');
+    return new IndexController($view, $twitterAPI, $textAPI);
 };
 
 
