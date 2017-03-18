@@ -1,0 +1,7 @@
+@import "_foundation-customizations";
+@import "~foundation-sites/scss/foundation";
+
+$global-flexbox: true !global;
+@include foundation-global-styles;
+@include foundation-flex-grid;
+@include foundation-typography;
