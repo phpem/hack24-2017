@@ -2,9 +2,6 @@
   "name": "echochamber",
   "version": "1.0.0",
   "description": "Donald Trump is a wanker!",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/phpem/hack24-2017.git"
@@ -37,6 +34,7 @@
     "react-dom": "^15.4.2"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/webpack --verbose"
+    "postinstall": "./node_modules/.bin/webpack",
+    "build": "./node_modules/.bin/webpack"
   }
 }
