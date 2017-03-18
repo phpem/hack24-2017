@@ -1,25 +1,25 @@
 {
-  "name": "phpem/hack24-2017",
-  "type": "project",
-  "require": {
-    "aylien/textapi": "^0.6.0",
-    "vlucas/phpdotenv": "^2.4",
-    "dg/twitter-php": "^3.6"
-  },
-  "require-dev": {
-    "phpspec/phpspec": "^3.0"
-  },
-  "config": {
-    "bin-dir": "bin"
-  },
-  "autoload": {
-    "psr-0": {
-      "": "src"
+    "name": "phpem/hack24-2017",
+    "type": "project",
+    "require": {
+        "aylien/textapi": "^0.6.0",
+        "vlucas/phpdotenv": "^2.4",
+        "dg/twitter-php": "^3.6"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "license": "MIT",
+    "scripts": {
+        "start": "php -S localhost:9999 -t public",
+	"test": "docker run -v $(pwd):/app phpspec/phpspec run"
     }
-  },
-  "license": "MIT",
-  "scripts": {
-    "start": "php -S localhost:9999 -t public",
-    "test": "docker run -v $(pwd):/app phpspec/phpspec run"
-  }
 }

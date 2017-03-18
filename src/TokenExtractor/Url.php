@@ -1,8 +1,12 @@
 <?php
 
-class UrlExtractor
+namespace App\TokenExtractor;
+
+use App\TokenExtractor;
+
+class Url implements TokenExtractor
 {
-    public function getUrls($string)
+    public function extract(string $string): array
     {
         preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $string, $match);
 
