@@ -1,5 +1,7 @@
 <?php
 
+use App\DgTwitter;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = new Dotenv\Dotenv(__DIR__ . '/../');
@@ -14,24 +16,17 @@ $sentiment = $textapi->Sentiment($input);
 $entities = $textapi->Entities($input);
 
 
-$twitter = new Twitter(
-    getenv("TWITTER_CONSUMER_KEY"),
-    getenv("TWITTER_CONSUMER_SECRET"),
-    getenv("TWITTER_TOKEN"),
-    getenv("TWITTER_TOKEN_SECRET")
-);
-
 $tweets = [];
 
-$tmp = DgTwitter::create(
-    getenv("TWITTER_CONSUMER_KEY"),
-    getenv("TWITTER_CONSUMER_SECRET"),
-    getenv("TWITTER_TOKEN"),
-    getenv("TWITTER_TOKEN_SECRET")
+$twitter = DgTwitter::create(
+    getenv('TWITTER_CONSUMER_KEY'),
+    getenv('TWITTER_CONSUMER_SECRET'),
+    getenv('TWITTER_TOKEN'),
+    getenv('TWITTER_TOKEN_SECRET')
 );
 
-$tweets = $tmp->getMeAndFriendsTimeLine();
+$tweets = $twitter->getMeAndFriendsTimeLine();
 
-header("Content-type:application/json");
+header('Content-type:application/json');
 echo json_encode(['sentiment' => $sentiment, 'entities' => $entities, 'tweets' => $tweets]);
 
