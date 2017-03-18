@@ -3,7 +3,8 @@
     "type": "project",
     "require": {
         "aylien/textapi": "^0.6.0",
-        "vlucas/phpdotenv": "^2.4"
+        "vlucas/phpdotenv": "^2.4",
+        "dg/twitter-php": "^3.6"
     },
     "require-dev": {
         "phpspec/phpspec": "^3.0"
