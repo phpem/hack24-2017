@@ -3,7 +3,7 @@ node_modules/
 
 public/css/*
 public/js/*
-cache/
+
 
 .env
 bin/
@@ -11,5 +11,6 @@ bin/
 
 storage/logs/*
 !storage/logs/.gitkeep
+
 storage/cache/*
 !storage/cache/.gitkeep
