@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+
+    web:
+        build: docker/web
+        environment:
+            - VIRTUAL_HOST=escape.docker
+            - VIRTUAL_PORT=80
+            - HTTPS_METHOD=noredirect
+        links:
+            - php-fpm
+        volumes:
+            - .:/srv
+
+    php-fpm:
+        image: php:7.1-fpm-alpine
+        volumes:
+            - .:/srv
