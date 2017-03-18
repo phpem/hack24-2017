@@ -15,6 +15,8 @@ class DgTwitter implements TwitterApi
             $tokenSecret
         );
 
+        $client->httpOptions[CURLOPT_SSL_VERIFYPEER] = true;
+
         $created = new DgTwitter();
         $created->client = $client;
 
