@@ -3,6 +3,7 @@ node_modules/
 
 public/css/*
 public/js/*
+cache/
 
 .env
 bin/
