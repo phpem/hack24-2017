@@ -9,4 +9,8 @@
     fastcgi / php-fpm:9000 php {
         index index.php
     }
+
+    rewrite {
+        to {path} {path}/ /index.php?{query}
+    }
 }
