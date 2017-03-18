@@ -9,5 +9,4 @@
     fastcgi / php-fpm:9000 php {
         index index.php
     }
-
 }
