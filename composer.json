@@ -5,5 +5,8 @@
         "aylien/textapi": "^0.6.0",
         "vlucas/phpdotenv": "^2.4"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "scripts": {
+        "start": "php -S localhost:9999 -t public"
+    }
 }
