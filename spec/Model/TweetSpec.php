@@ -1,8 +1,8 @@
 <?php
 
-namespace spec\Model;
+namespace spec\App\Model;
 
-use Model\Tweet;
+use App\Model\Tweet;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 

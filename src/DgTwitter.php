@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 class DgTwitter implements TwitterApi
 {
     private $client;
@@ -23,7 +25,7 @@ class DgTwitter implements TwitterApi
         $tweets = [];
 
         foreach ($this->client->load(Twitter::ME_AND_FRIENDS) as $item) {
-            $tweet = new \Model\Tweet();
+            $tweet = new Model\Tweet();
             $tweet->userName = $item->user->screen_name;
             $tweet->message = $item->text;
             foreach($item->entities->hashtags as $hashtag) {
