@@ -22,6 +22,15 @@ $twitter = new Twitter(
 );
 
 $tweets = [];
+
+foreach ($twitter->load(Twitter::ME_AND_FRIENDS) as $item) {
+    $tweet = new \Model\Tweet();
+    $tweet->userName = '';
+    $tweet->message = $item->text;
+
+    $tweets[] = $tweet;
+}
+
 header("Content-type:application/json");
 echo json_encode(['sentiment' => $sentiment, 'entities' => $entities, 'tweets' => $tweets]);
 
