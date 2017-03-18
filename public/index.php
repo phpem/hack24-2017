@@ -9,12 +9,6 @@ $dotenv->load();
 
 $textapi = new AYLIEN\TextAPI(getenv("AYLIEN_APP_ID"), getenv("AYLIEN_KEY"));
 
-$input = ['text' => 'Donald Trump is a complete wanker.'];
-
-$sentiment = $textapi->Sentiment($input);
-
-$entities = $textapi->Entities($input);
-
 $tweets = [];
 
 $twitter = App\DgTwitter::create(
@@ -24,11 +18,31 @@ $twitter = App\DgTwitter::create(
     getenv('TWITTER_TOKEN_SECRET')
 );
 
-$tweets = $twitter->getMeAndFriendsTimeLine();
+if (isset($_POST['topic'])) {
+    header('Content-type:application/json');
 
-header('Content-type:application/json');
-//$tweets = $twitter->search('trump from:brunty');
-$tweets = $twitter->search('#donaldtrump');
+    $tweets = $twitter->getMeAndFriendsTimeLine();
 
-echo json_encode(['sentiment' => $sentiment, 'entities' => $entities, 'tweets' => $tweets]);
+    $tweets = $twitter->search(sprintf('%s from:brunty', $_POST['topic']));
 
+    $analysedTweets = [];
+
+    foreach ($tweets as $tweet) {
+        $analysedTweets[$tweet->id] = [
+            'raw_text'          => $tweet->text,
+            'analysed_text'     => $textapi->Sentiment($tweet->text),
+            'analysed_entities' => $textapi->Entities($tweet->text)
+
+        ];
+    }
+    echo json_encode(['tweets' => $analysedTweets]);
+} else {
+    ?>
+
+    <form action="" method="POST">
+        <input type="text" name="topic">
+        <button>Submit</button>
+    </form>
+
+    <?php
+}
