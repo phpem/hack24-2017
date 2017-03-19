@@ -2,22 +2,24 @@
 
 {% block content %}
     <div style="color: white; font-family: 'Roboto', sans-serif !important;" xmlns="http://www.w3.org/1999/html">
-        <div>
-            <h1 style="text-align: center"><a href="https://www.twitter.com/{{ user }}">@{{ user }}</a></h1>
+        <div style="text-align: center">
+            <img src="{{ user_info.profile_image_url_https | replace({'_normal': ''})}}" style="border-radius: 50%; margin: 10px; width: 200px; border: solid 2px white " >
+            <h1 style="text-align: center; font-size: 30px"><a href="https://www.twitter.com/{{ user }}" style="color: white">@{{ user }}</a></h1>
         </div>
-        <div style="text-transform: uppercase">
-            <p style="text-align: center">
-                {{ echo_chamber ? 'is' : 'is not' }} in an <br />
+        <div style="text-transform: uppercase; font-size: 40px;">
+            <p style="text-align: center; line-height: 1.1">
+
+                <strong>{{ echo_chamber ? 'is' : 'is not' }}</strong> in an <br />
                 echo chamber for<br />
                 "{{ topic }}"
             </p>
         </div>
 
-        <div style="text-align: center; max-width: 800px; padding-left: 10px; padding-right: 10px; margin-left: auto; margin-right: auto">
-            <h3>Explore...</h3>
+        <div style="text-align: center; max-width: 800px; padding-left: 10px; padding-right: 10px; padding-top: 25px; margin-left: auto; margin-right: auto" >
+            <h3 style="font-size: 18px; opacity: 0.7">Explore their recent follows...</h3>
             {% for friend in friends %}
                 <a href="topic?username={{ friend.screen_name }}&topic={{ topic }}">
-                    <img style="border-radius: 50%; padding: 10px" src="{{ friend.profile_image_url_https }}" alt="{{ friend.screen_name }}"/>
+                    <img style="border-radius: 50%; margin: 10px; border: solid 1px white;" src="{{ friend.profile_image_url_https }}" alt="{{ friend.screen_name }}"/>
                 </a>
             {% endfor %}
         </div>
