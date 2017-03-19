@@ -5,12 +5,12 @@
 
     <img src="images/logo.png" alt="" id="main_logo"/>
     <div class="main-search">
-        <form action="/topic" method="post">
+        <form action="/topic" method="GET">
             How does
             <input type="text" class="main-search__input" name="username" placeholder="@username">
             feel about
             <input type="text" class="main-search__input" name="topic" placeholder="topic">
-            ?
+            <button>?</button>
         </form>
     </div>
 {% endblock %}

@@ -4,4 +4,4 @@ use App\Controllers\IndexController;
 
 $app->get('/', IndexController::class . ':index');
 
-$app->post('/topic', IndexController::class . ':topic');
+$app->get('/topic', IndexController::class . ':topic');

@@ -10,6 +10,7 @@ use Slim\Views\Twig;
 
 class IndexController
 {
+
     protected $view;
 
     /**
@@ -36,77 +37,88 @@ class IndexController
 
     public function topic(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $topic = $request->getParsedBody()['topic'];
-        $user = $request->getParsedBody()['username'];
+        $topic = $request->getQueryParams()['topic'];
+        $user = $request->getQueryParams()['username'];
 
         $tweets = $this->twitterAPI->search(sprintf('%s from:%s', $topic, $user));
 
-        $analysedTweets = [];
-        $sentiment = 0;
-        $type = 0;
+        $userSentiment = 0;
+        $first = true;
 
         foreach ($tweets as $tweet) {
             $tweetSentiment = $this->textAPI->Sentiment($tweet->text);
 
-            $analysedTweets[$tweet->id] = [
-                'raw_text'          => $tweet->text,
-                'analysed_text'     => $tweetSentiment,
-                'analysed_entities' => $this->textAPI->Entities($tweet->text)
-            ];
-
             switch ($tweetSentiment->polarity) {
                 case 'positive':
-                    ++$sentiment;
+                    $userSentiment += 1 * $tweetSentiment->polarity_confidence;
                     break;
                 case 'negative':
-                    --$sentiment;
+                    $userSentiment += -1 * $tweetSentiment->polarity_confidence;
                     break;
             }
 
-
-            switch ($tweetSentiment->subjectivity) {
-                case 'objective':
-                    ++$type;
-                    break;
-                case 'subjective':
-                    --$type;
-                    break;
+            if ( ! $first) {
+                $userSentiment /= 2;
             }
-        }
 
-        if ($sentiment === 0) {
-            $sentiment = 'neutral';
-        }
-
-        if ($sentiment > 0) {
-            $sentiment = 'positive';
-        }
-
-        if ($sentiment < 0) {
-            $sentiment = 'negative';
-        }
-
-        if ($type === 0) {
-            $type = '';
-        }
-
-        if ($type > 0) {
-            $type = 'objectively';
-        }
-
-        if ($type < 0) {
-            $type = 'subjectively';
+            $first = false;
         }
 
         $friends = $this->twitterAPI->getFriends($user);
 
-        return $this->view->render($response, 'index/topic.html.twig', [
-            'user' => $user,
-            'friends' => $friends,
-            'type' => $type,
-            'sentiment' => $sentiment,
-            'topic' => $topic
-        ]);
-    }
+        $friendSentiments = [];
+        $totalTweets = 0;
 
+        foreach ($friends as $friend) {
+            $friendSentiment = 0;
+            $tweets = $this->twitterAPI->search("$topic from:{$friend->screen_name}");
+            $totalTweets += count($tweets);
+
+            $first = true;
+            foreach ($tweets as $tweet) {
+                $tweetSentiment = $this->textAPI->Sentiment($tweet->text);
+
+                switch ($tweetSentiment->polarity) {
+                    case 'positive':
+                        $friendSentiment += 1 * $tweetSentiment->polarity_confidence;
+                        break;
+                    case 'negative':
+                        $friendSentiment += -1 * $tweetSentiment->polarity_confidence;
+                        break;
+                }
+
+                if ( ! $first) {
+                    $friendSentiment /= 2;
+                }
+
+                $first = false;
+            }
+
+            $friendSentiments[$friend->screen_name] = $friendSentiment;
+        }
+
+        $averageFriendSentiment = array_sum($friendSentiments) / count($friendSentiments);
+
+        $echoChamber = false;
+        $positiveThreshold = 0.4;
+        $negativeThreshold = -0.4;
+        $userAndFriendSentimentIsPositive = $userSentiment > $positiveThreshold && $averageFriendSentiment > $positiveThreshold;
+        $userAndFriendSentimentIsNegative = $userSentiment < $negativeThreshold && $averageFriendSentiment < $negativeThreshold;
+
+        if ($userAndFriendSentimentIsPositive || $userAndFriendSentimentIsNegative) {
+            $echoChamber = true;
+        }
+
+        return $this->view->render(
+            $response,
+            'index/topic.html.twig',
+            [
+                'user'         => $user,
+                'echo_chamber' => $echoChamber,
+                'friends'      => $friends,
+                'sentiment'    => $userSentiment,
+                'topic'        => $topic
+            ]
+        );
+    }
 }

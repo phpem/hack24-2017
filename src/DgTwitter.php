@@ -6,7 +6,8 @@ use Predis\Client;
 
 class DgTwitter implements TwitterApi
 {
-    static $cacheTTL = 345600;
+
+    public static $cacheTTL = 345600;
 
     /** @var  \Twitter */
     private $client;
@@ -63,7 +64,7 @@ class DgTwitter implements TwitterApi
     {
         $hash_key = md5($query);
 
-        if ( !$ret = json_decode($this->redisCache->get($hash_key))) {
+        if ( ! $ret = json_decode($this->redisCache->get($hash_key))) {
             $ret = $this->client->search($query);
             $this->redisCache->set($hash_key, json_encode($ret), 'EX', self::$cacheTTL);
         }
@@ -71,12 +72,24 @@ class DgTwitter implements TwitterApi
         return $ret;
     }
 
-    public function getFriends($username): array
+    public function getFriends(string $username): array
     {
         $hashKey = 'friends' . md5($username);
 
         if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
-            $ret = $this->client->request('friends/list', 'GET');
+            $ret = $this->client->request('friends/list.json?screen_name=' . $username, 'GET');
+            $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
+        }
+
+        return $ret->users;
+    }
+
+    public function getTweetsForUser(string $username): array
+    {
+        $hashKey = 'tweets' . md5($username);
+
+        if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
+            $ret = $this->client->request('statuses/user_timeline.json?screen_name=' . $username, 'GET');
             $this->redisCache->set($hashKey, json_encode($ret->users), 'EX', self::$cacheTTL);
         }
 
