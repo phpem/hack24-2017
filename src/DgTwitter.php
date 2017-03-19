@@ -110,6 +110,7 @@ class DgTwitter implements TwitterApi
         $request = 'users/show.json?screen_name=' . $username;
         $hashKey = md5($request);
 
+
         if ($this->redisCache->exists($hashKey)) {
             $ret = json_decode($this->redisCache->get($hashKey));
         } else {
