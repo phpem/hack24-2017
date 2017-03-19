@@ -7,7 +7,7 @@ use Predis\Client;
 
 class CachedAYLIEN
 {
-    static $cacheTTL = 345600;
+    public static $cacheTTL = 345600;
 
     private $redisCache;
 
@@ -21,22 +21,22 @@ class CachedAYLIEN
 
     public function __call(string $method, array $arguments)
     {
-        $hash_key = md5($method . json_encode($arguments));
+        $hashKey = md5($method . json_encode($arguments));
 
-        if ( !$ret = json_decode($this->get($hash_key))) {
+        if ( !$ret = json_decode($this->get($hashKey))) {
             $ret = call_user_func_array(array($this->textAPI, $method), $arguments);
-            $this->put($hash_key, json_encode($ret));
+            $this->put($hashKey, json_encode($ret));
         }
 
         return $ret;
     }
 
-    public function put(string $name, string $item)
+    private function put(string $name, string $item)
     {
         $this->redisCache->set($name, $item, 'EX', self::$cacheTTL);
     }
 
-    public function get(string $name)
+    private function get(string $name)
     {
         return $this->redisCache->get($name);
     }

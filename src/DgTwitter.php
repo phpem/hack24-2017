@@ -29,7 +29,7 @@ class DgTwitter implements TwitterApi
         $client->httpOptions[CURLOPT_SSL_VERIFYPEER] = true;
 
         $client::$cacheDir = $cacheDir;
-        $client::$cacheExpire = "96 hours";
+        $client::$cacheExpire = '96 hours';
 
         $created = new DgTwitter();
         $created->client = $client;
@@ -62,13 +62,13 @@ class DgTwitter implements TwitterApi
 
     public function search(string $query): array
     {
-        $hash_key = md5($query);
+        $hashKey = md5($query);
 
-        if ($this->redisCache->exists($hash_key)) {
-            $ret = json_decode($this->redisCache->get($hash_key));
+        if ($this->redisCache->exists($hashKey)) {
+            $ret = json_decode($this->redisCache->get($hashKey));
         } else {
             $ret = $this->client->search($query);
-            $this->redisCache->set($hash_key, json_encode($ret), 'EX', self::$cacheTTL);
+            $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
         }
 
         return $ret;
