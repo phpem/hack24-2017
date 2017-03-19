@@ -37,7 +37,7 @@ class IndexController
     public function topic(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $topic = $request->getParsedBody()['topic'];
-        $user = $request->getParsedBody()['user'];
+        $user = $request->getParsedBody()['username'];
 
         $tweets = $this->twitterAPI->search(sprintf('%s from:%s', $topic, $user));
 
