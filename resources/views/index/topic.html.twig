@@ -8,8 +8,23 @@
         </div>
         <div style="text-transform: uppercase; font-size: 40px;">
             <p style="text-align: center; line-height: 1.1">
+                is
+                {% if user_sentiment >= 0.7 or user_sentiment <= -0.7 %}
+                    very
+                {% elseif (user_sentiment >= 0.4 and user_sentiment < 0.7) or (user_sentiment <= -0.4 and user_sentiment > - 0.7)%}
+                    fairly
+                {% endif %}
 
-                <strong>{{ echo_chamber ? 'is' : 'is not' }}</strong> in an <br />
+                {% if user_sentiment >= 0.4 %}
+                    positive
+                {% elseif user_sentiment <= -0.4%}
+                    negative
+                {% else %}
+                    neutral
+                {% endif %}
+
+                <br />
+                and <strong>{{ echo_chamber ? 'is' : 'is not' }}</strong> in an <br />
                 echo chamber for<br />
                 "{{ topic }}"
             </p>

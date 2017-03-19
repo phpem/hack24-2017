@@ -115,12 +115,13 @@ class IndexController
             $response,
             'index/topic.html.twig',
             [
-                'user'         => $user,
-                'user_info'    => $userInfo,
-                'echo_chamber' => $echoChamber,
-                'friends'      => $friends,
-                'sentiment'    => $userSentiment,
-                'topic'        => $topic
+                'user'           => $user,
+                'user_sentiment' => $userSentiment,
+                'user_info'      => $userInfo,
+                'echo_chamber'   => $echoChamber,
+                'friends'        => $friends,
+                'sentiment'      => $userSentiment,
+                'topic'          => $topic
             ]
         );
     }
