@@ -73,7 +73,7 @@ class DgTwitter implements TwitterApi
 
     public function getFriends($username): array
     {
-        $hashKey = md5($username);
+        $hashKey = 'friends' . md5($username);
 
         if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
             $ret = $this->client->request('friends/list', 'GET');
