@@ -1,20 +1,26 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <div style="color: white;">
+    <div style="color: white; font-family: 'Roboto', sans-serif !important;" xmlns="http://www.w3.org/1999/html">
+        <div>
+            <h1 style="text-align: center"><a href="https://www.twitter.com/{{ user }}">@{{ user }}</a></h1>
+        </div>
+        <div style="text-transform: uppercase">
+            <p style="text-align: center">
+                {{ echo_chamber ? 'is' : 'is not' }} in an <br />
+                echo chamber for<br />
+                "{{ topic }}"
+            </p>
+        </div>
 
-        Overall, {{ user }} is {{ type }} {{ sentiment }} about {{ topic }}<br />
-
-        {% if echo_chamber %}
-            Oh no, echo... echo...
-        {% else %}
-            They're not in an echo chamber!
-        {% endif %}
-        <br />
-        {% for friend in friends %}
-            <a href="topic?username={{ friend.screen_name }}&topic={{ topic }}">{{ friend.screen_name }}</a><br />
-        {% endfor %}
+        <div style="text-align: center; max-width: 800px; padding-left: 10px; padding-right: 10px; margin-left: auto; margin-right: auto">
+            <h3>Explore...</h3>
+            {% for friend in friends %}
+                <a href="topic?username={{ friend.screen_name }}&topic={{ topic }}">
+                    <img style="border-radius: 50%; padding: 10px" src="{{ friend.profile_image_url_https }}" alt="{{ friend.screen_name }}"/>
+                </a>
+            {% endfor %}
+        </div>
     </div>
-
 
 {% endblock %}
