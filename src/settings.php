@@ -30,6 +30,8 @@ return [
         'aylien' => [
             'app_id' => getenv("AYLIEN_APP_ID"),
             'key' => getenv("AYLIEN_KEY")
-        ]
+        ],
+
+        'redis' => getenv('REDIS_URL')
     ],
 ];
