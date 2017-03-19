@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Predis\Client;
+
 class DgTwitter implements TwitterApi
 {
     static $cacheTTL = 345600;
@@ -9,6 +11,9 @@ class DgTwitter implements TwitterApi
     /** @var  \Twitter */
     private $client;
 
+    /**
+     * @var Client
+     */
     public $redisCache;
 
     public static function create($consumerKey, $consumerSecret, $token, $tokenSecret, $cacheDir, $cacheRedis)
@@ -61,6 +66,18 @@ class DgTwitter implements TwitterApi
         if ( !$ret = json_decode($this->redisCache->get($hash_key))) {
             $ret = $this->client->search($query);
             $this->redisCache->set($hash_key, json_encode($ret), 'EX', self::$cacheTTL);
+        }
+
+        return $ret;
+    }
+
+    public function getFriends($username): array
+    {
+        $hashKey = md5($username);
+
+        if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
+            $ret = $this->client->request('friends/list', 'GET');
+            $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
         }
 
         return $ret;
