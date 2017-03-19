@@ -1,12 +1,22 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <img src="images/logo.png" alt="" id="main_logo"/>
-    <form action="/topic" class="main-search">
-        How does
-        <input type="text" class="main-search__input" name="username" placeholder="@username" />
-        feel about
-        <input type="text" class="main-search__input" name="topic" placeholder="topic" />
-        <input type="submit" class="main-search__button" value="?" />
-    </form>
+    <section class="row align-center">
+        <div class="columns shrink">
+            <img src="images/logo.png" alt="" id="main_logo"/>
+        </div>
+    </section>
+    <section class="row align-center">
+        <div class="columns shrink">
+            <form action="/topic" class="main-search">
+                How does
+                <input type="text" class="main-search__input" name="username" placeholder="@username" />
+                feel about
+                <input type="text" class="main-search__input" name="topic" placeholder="topic" />
+                <input type="submit" class="main-search__button" value="?" />
+            </form>
+        </div>
+    </section>
+
+
 {% endblock %}
