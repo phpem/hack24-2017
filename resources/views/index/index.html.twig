@@ -1,16 +1,6 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <div id="search"></div>
-
     <img src="images/logo.png" alt="" id="main_logo"/>
-    <div class="main-search">
-        <form action="/topic" method="post">
-            How does
-            <input type="text" class="main-search__input" name="username" placeholder="@username">
-            feel about
-            <input type="text" class="main-search__input" name="topic" placeholder="topic">
-            ?
-        </form>
-    </div>
+    <div id="search" class="main-search"></div>
 {% endblock %}
