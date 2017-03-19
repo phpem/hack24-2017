@@ -4,11 +4,14 @@ namespace App;
 
 class DgTwitter implements TwitterApi
 {
+    static $cacheTTL = 345600;
 
     /** @var  \Twitter */
     private $client;
 
-    public static function create($consumerKey, $consumerSecret, $token, $tokenSecret, $cacheDir)
+    public $redisCache;
+
+    public static function create($consumerKey, $consumerSecret, $token, $tokenSecret, $cacheDir, $cacheRedis)
     {
         $client = new \Twitter(
             $consumerKey,
@@ -20,9 +23,12 @@ class DgTwitter implements TwitterApi
         $client->httpOptions[CURLOPT_SSL_VERIFYPEER] = true;
 
         $client::$cacheDir = $cacheDir;
+        $client::$cacheExpire = "96 hours";
 
         $created = new DgTwitter();
         $created->client = $client;
+
+        $created->redisCache = $cacheRedis;
 
         return $created;
     }
@@ -50,6 +56,13 @@ class DgTwitter implements TwitterApi
 
     public function search(string $query): array
     {
-        return $this->client->search($query);
+        $hash_key = md5($query);
+
+        if ( !$ret = json_decode($this->redisCache->get($hash_key))) {
+            $ret = $this->client->search($query);
+            $this->redisCache->set($hash_key, json_encode($ret), 'EX', self::$cacheTTL);
+        }
+
+        return $ret;
     }
 }

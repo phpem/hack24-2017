@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\DgTwitter;
-use AYLIEN\TextAPI;
+use App\CachedAYLIEN;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Views\Twig;
@@ -18,11 +18,11 @@ class IndexController
     private $twitterAPI;
 
     /**
-     * @var TextAPI
+     * @var CachedAYLIEN
      */
     private $textAPI;
 
-    public function __construct(Twig $view, DgTwitter $twitterAPI, TextAPI $textAPI)
+    public function __construct(Twig $view, DgTwitter $twitterAPI, CachedAYLIEN $textAPI)
     {
         $this->view = $view;
         $this->twitterAPI = $twitterAPI;
@@ -34,19 +34,16 @@ class IndexController
         return $this->view->render($response, 'index/index.html.twig');
     }
 
-    public function topic(ServerRequestInterface $request, ResponseInterface $response, array  $args)
+    public function topic(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $tweets = $this->twitterAPI->getMeAndFriendsTimeLine();
-
         $topic = $request->getParsedBody()['topic'];
-        $user = $request->getParsedBody()['user'];
+        $user = $request->getParsedBody()['username'];
 
         $tweets = $this->twitterAPI->search(sprintf('%s from:%s', $topic, $user));
 
         $analysedTweets = [];
         $sentiment = 0;
         $type = 0;
-
 
         foreach ($tweets as $tweet) {
             $tweetSentiment = $this->textAPI->Sentiment($tweet->text);

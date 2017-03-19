@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
+use Predis\Client;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 
@@ -35,6 +36,14 @@ $container['view'] = function (ContainerInterface $c) {
     return $view;
 };
 
+$container['redis'] = function(ContainerInterface $c) {
+
+    $settings = $c->get('settings')['redis'];
+    $redis = new Client($settings);
+
+    return $redis;
+};
+
 $container['twitterAPI'] = function (ContainerInterface $c) {
 
     $settings = $c->get('settings')['twitter'];
@@ -43,13 +52,23 @@ $container['twitterAPI'] = function (ContainerInterface $c) {
         $settings['consumer']['secret'],
         $settings['access']['token'],
         $settings['access']['secret'],
-        $settings['cache']
+        $settings['cache'],
+        $c->get('redis')
     );
 
     return $twitter;
 };
 
 $container['textAPI'] = function (ContainerInterface $c) {
+    $cachedTextAPI = new App\CachedAYLIEN(
+        $c->get('redis'),
+        $c->get('AYLIENTextAPI')
+    );
+
+    return $cachedTextAPI;
+};
+
+$container['AYLIENTextAPI'] = function (ContainerInterface $c) {
 
     $settings = $c->get('settings')['aylien'];
     $textapi = new AYLIEN\TextAPI(
