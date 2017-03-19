@@ -64,7 +64,9 @@ class DgTwitter implements TwitterApi
     {
         $hash_key = md5($query);
 
-        if ( ! $ret = json_decode($this->redisCache->get($hash_key))) {
+        if ($this->redisCache->exists($hash_key)) {
+            $ret = json_decode($this->redisCache->get($hash_key));
+        } else {
             $ret = $this->client->search($query);
             $this->redisCache->set($hash_key, json_encode($ret), 'EX', self::$cacheTTL);
         }
@@ -77,7 +79,9 @@ class DgTwitter implements TwitterApi
         $request = 'friends/list.json?screen_name=' . $username;
         $hashKey = md5($request);
 
-        if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
+        if ($this->redisCache->exists($hashKey)) {
+            $ret = json_decode($this->redisCache->get($hashKey));
+        } else {
             $ret = $this->client->request($request, 'GET');
             $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
         }
@@ -90,9 +94,11 @@ class DgTwitter implements TwitterApi
         $request = 'statuses/user_timeline.json?screen_name=' . $username;
         $hashKey = md5($request);
 
-        if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
+        if ($this->redisCache->exists($hashKey)) {
+            $ret = json_decode($this->redisCache->get($hashKey));
+        } else {
             $ret = $this->client->request($request, 'GET');
-            $this->redisCache->set($hashKey, json_encode($ret->users), 'EX', self::$cacheTTL);
+            $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
         }
 
         return $ret->users;
@@ -104,7 +110,9 @@ class DgTwitter implements TwitterApi
         $request = 'users/show.json?screen_name=' . $username;
         $hashKey = md5($request);
 
-        if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
+        if ($this->redisCache->exists($hashKey)) {
+            $ret = json_decode($this->redisCache->get($hashKey));
+        } else {
             $ret = $this->client->request($request, 'GET');
             $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
         }
