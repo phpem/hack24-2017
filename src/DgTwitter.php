@@ -77,9 +77,9 @@ class DgTwitter implements TwitterApi
 
         if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
             $ret = $this->client->request('friends/list', 'GET');
-            $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
+            $this->redisCache->set($hashKey, json_encode($ret->users), 'EX', self::$cacheTTL);
         }
 
-        return $ret;
+        return $ret->users;
     }
 }

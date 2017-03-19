@@ -98,8 +98,11 @@ class IndexController
             $type = 'subjectively';
         }
 
+        $friends = $this->twitterAPI->getFriends($user);
+
         return $this->view->render($response, 'index/topic.html.twig', [
             'user' => $user,
+            'friends' => $friends,
             'type' => $type,
             'sentiment' => $sentiment,
             'topic' => $topic
