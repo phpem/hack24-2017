@@ -2,5 +2,11 @@
 
 {% block content %}
     <img src="images/logo.png" alt="" id="main_logo"/>
-    <div id="search" class="main-search"></div>
+    <form action="/topic" class="main-search">
+        How does
+        <input type="text" class="main-search__input" name="username" placeholder="@username" />
+        feel about
+        <input type="text" class="main-search__input" name="topic" placeholder="topic" />
+        <input type="submit" class="main-search__button" value="?" />
+    </form>
 {% endblock %}
