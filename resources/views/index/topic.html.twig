@@ -1,12 +1,12 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <div style="color: white; font-family: 'Roboto', sans-serif !important;" xmlns="http://www.w3.org/1999/html">
-        <div style="text-align: center">
-            <img src="{{ user_info.profile_image_url_https | replace({'_normal': ''})}}" style="border-radius: 50%; margin: 10px; width: 200px; border: solid 2px white " >
+    <div style="color: white; font-family: 'Roboto', sans-serif !important;">
+        <div style="text-align: center" class="animated fadeIn">
+            <img src="{{ user_info.profile_image_url_https | replace({'_normal': ''})}}" style="border-radius: 50%; margin: 10px; width: 200px; height: 200px; border: solid 2px white " >
             <h1 style="text-align: center; font-size: 30px"><a href="https://www.twitter.com/{{ user }}" style="color: white">@{{ user }}</a></h1>
         </div>
-        <div style="text-transform: uppercase; font-size: 40px;">
+        <div style="text-transform: uppercase; font-size: 40px;" class="animated fadeIn">
             <p style="text-align: center; line-height: 1.1">
                 is
                 {% if user_sentiment >= 0.7 or user_sentiment <= -0.7 %}
@@ -30,11 +30,11 @@
             </p>
         </div>
 
-        <div style="text-align: center; max-width: 800px; padding-left: 10px; padding-right: 10px; padding-top: 25px; margin-left: auto; margin-right: auto" >
+        <div style="text-align: center; max-width: 800px; padding-left: 10px; padding-right: 10px; padding-top: 25px; margin-left: auto; margin-right: auto; animation-delay: 0.5s; -webkit-animation-delay: 0.5s;" class="animated fadeIn">
             <h3 style="font-size: 18px; opacity: 0.7">Explore their recent follows...</h3>
             {% for friend in friends %}
                 <a href="topic?username={{ friend.screen_name }}&topic={{ topic }}">
-                    <img style="border-radius: 50%; margin: 10px; border: solid 1px white;" src="{{ friend.profile_image_url_https }}" alt="{{ friend.screen_name }}"/>
+                    <img style="border-radius: 50%; margin: 10px; border: solid 1px white; width: 50px; height: 50px;" src="{{ friend.profile_image_url_https }}" alt="{{ friend.screen_name }}"/>
                 </a>
             {% endfor %}
         </div>
