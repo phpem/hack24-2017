@@ -74,10 +74,11 @@ class DgTwitter implements TwitterApi
 
     public function getFriends(string $username): array
     {
-        $hashKey = 'friends' . md5($username);
+        $request = 'friends/list.json?screen_name=' . $username;
+        $hashKey = md5($request);
 
         if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
-            $ret = $this->client->request('friends/list.json?screen_name=' . $username, 'GET');
+            $ret = $this->client->request($request, 'GET');
             $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
         }
 
@@ -86,13 +87,28 @@ class DgTwitter implements TwitterApi
 
     public function getTweetsForUser(string $username): array
     {
-        $hashKey = 'tweets' . md5($username);
+        $request = 'statuses/user_timeline.json?screen_name=' . $username;
+        $hashKey = md5($request);
 
         if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
-            $ret = $this->client->request('statuses/user_timeline.json?screen_name=' . $username, 'GET');
+            $ret = $this->client->request($request, 'GET');
             $this->redisCache->set($hashKey, json_encode($ret->users), 'EX', self::$cacheTTL);
         }
 
         return $ret->users;
+    }
+
+    public function getUserInfo(string $username): \stdClass
+    {
+
+        $request = 'users/show.json?screen_name=' . $username;
+        $hashKey = md5($request);
+
+        if ( ! $ret = json_decode($this->redisCache->get($hashKey))) {
+            $ret = $this->client->request($request, 'GET');
+            $this->redisCache->set($hashKey, json_encode($ret), 'EX', self::$cacheTTL);
+        }
+
+        return $ret;
     }
 }

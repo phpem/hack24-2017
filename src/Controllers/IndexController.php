@@ -40,6 +40,8 @@ class IndexController
         $topic = $request->getQueryParams()['topic'];
         $user = $request->getQueryParams()['username'];
 
+        $userInfo = $this->twitterAPI->getUserInfo($user);
+
         $tweets = $this->twitterAPI->search(sprintf('%s from:%s', $topic, $user));
 
         $userSentiment = 0;
@@ -114,6 +116,7 @@ class IndexController
             'index/topic.html.twig',
             [
                 'user'         => $user,
+                'user_info'    => $userInfo,
                 'echo_chamber' => $echoChamber,
                 'friends'      => $friends,
                 'sentiment'    => $userSentiment,
