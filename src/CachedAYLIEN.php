@@ -23,7 +23,9 @@ class CachedAYLIEN
     {
         $hashKey = md5($method . json_encode($arguments));
 
-        if ( !$ret = json_decode($this->get($hashKey))) {
+        if ($this->redisCache->exists($hashKey)) {
+            $ret = json_decode($this->get($hashKey));
+        } else {
             $ret = call_user_func_array(array($this->textAPI, $method), $arguments);
             $this->put($hashKey, json_encode($ret));
         }
